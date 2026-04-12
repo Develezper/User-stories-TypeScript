@@ -1,81 +1,142 @@
-# Historia de Usuario M5.4S3: Componentes UI Reutilizables con TypeScript
+# Historia de Usuario M5.4S3
 
-## 📝 Descripción General
-Esta historia de usuario se enfoca en la creación de una librería interna de componentes atómicos (**Button**, **Badge**, **Card**) bajo un esquema de tipado fuerte con **TypeScript**. El objetivo es establecer las bases de una interfaz consistente, escalable y fácil de mantener, asegurando que cada componente sea modular y altamente configurable a través de sus props.
+Implementacion de componentes UI reutilizables (`Button`, `Badge` y `Card`) con props tipadas en TypeScript para React.
 
-**Story Points:** 20  
-**Estado:** Pendiente  
-**Sprint:** M5.4S3
+## Objetivo
 
----
+Construir una mini interfaz demostrativa que garantice:
 
-## 🎯 Objetivo de la Historia de Usuario
-Como desarrollador frontend, quiero crear componentes UI reutilizables (Button, Badge, Card) con tipado fuerte en TypeScript, para garantizar consistencia, escalabilidad y facilidad de mantenimiento en la interfaz.
+- consistencia visual
+- tipado fuerte
+- componentes modulares
+- una vista principal con cards que integran badges y botones
 
----
+## Stack
 
-## 📂 Estructura de Componentes
-Cada componente debe estar ubicado en su propio directorio dentro de `src/components/`:
+- React 19
+- TypeScript 5
+- Vite
+- ESLint
 
-- `src/components/Button/`: Lógica y estilos del botón.
-- `src/components/Badge/`: Etiquetas de estado o categoría.
-- `src/components/Card/`: Contenedor principal que integra Button y Badge.
+## Estructura
 
----
+```text
+week3/
+|-- src/
+|   |-- components/
+|   |   |-- Badge/
+|   |   |-- Button/
+|   |   `-- Card/
+|   |-- data/
+|   |-- App.tsx
+|   `-- main.tsx
+|-- bun.lock
+|-- package.json
+`-- README.md
+```
 
-## 📋 Tareas de Desarrollo y Criterios de Aceptación (CA)
+## Como ejecutar
 
-### TASK 1: Componente Button
-* **CA_01:** Soporte de variantes: `variant?: "primary" | "secondary" | "danger"` (Default: `primary`).
-* **CA_02:** Soporte de tamaños: `size?: "sm" | "md" | "lg"` (Default: `md`).
-* **CA_03:** Implementación de props opcionales: `disabled`, `loading`, `leftIcon`, `rightIcon` y `onClick`.
-* **CA_04:** Prop obligatoria `text: string`.
-* **CA_05:** Integración técnica para funcionar como acción principal dentro de una `Card`.
+```bash
+bun install
+bun run dev
+```
 
-### TASK 2: Componente Badge
-* **CA_06:** Prop obligatoria `label: string`.
-* **CA_07:** Soporte de estados: `status?: "success" | "warning" | "info" | "error" | "neutral"` (Default: `neutral`).
-* **CA_08:** Prop opcional `icon?: React.ReactNode`.
-* **CA_09:** Requisito de diseño: Cada `Card` debe renderizar al menos un `Badge`.
+Para validar el proyecto:
 
-### TASK 3: Componente Card
-* **CA_10:** Props obligatorias: `title: string`, `type: "green" | "white" | "black"`.
-* **CA_11:** Prop opcional `imageUrl?: string` para encabezados visuales.
-* **CA_12:** Prop opcional `footer?: React.ReactNode`, diseñado para inyectar componentes como `Button`.
-* **CA_13:** Integración obligatoria de al menos un `Badge` en su estructura interna.
+```bash
+bun run build
+bun run lint
+```
 
----
+## Componentes
 
-## 🛠️ Requerimientos Técnicos
+### `Button`
 
-### Requerimientos Funcionales (RF)
-* **RF_01:** Crear un componente `Button` tipado y reutilizable.
-* **RF_02:** Crear un componente `Badge` tipado y reutilizable.
-* **RF_03:** Crear un componente `Card` tipado que integre `Badge` y opcionalmente `Button`.
-* **RF_04:** Renderizar un listado de `Card` con ejemplos prácticos en la vista principal.
+Props disponibles:
 
-### Requerimientos No Funcionales (RNF)
-* **RNF_01:** Código desarrollado en React + TypeScript sin errores de tipado (`any` prohibido).
-* **RNF_02:** Componentes modulares y consistentes visualmente.
-* **RNF_03:** Diseño limpio y arquitectura extensible.
-* **RNF_04:** Compilación exitosa en entornos locales estándar.
+- `text: string` obligatorio
+- `variant?: "primary" | "secondary" | "danger"` con default `primary`
+- `size?: "sm" | "md" | "lg"` con default `md`
+- `disabled?: boolean`
+- `loading?: boolean`
+- `leftIcon?: React.ReactNode`
+- `rightIcon?: React.ReactNode`
+- `onClick?: MouseEventHandler<HTMLButtonElement>`
 
----
+Ejemplo:
 
-## 🚀 Guía de Uso de Componentes
-
-### Ejemplo de Implementación:
 ```tsx
-import { Card } from './components/Card';
-import { Button } from './components/Button';
-import { Badge } from './components/Badge';
+import { Button } from './components'
 
-const MyView = () => (
-  <Card 
-    title="Nuevo Proyecto" 
-    type="white"
-    footer={<Button text="Ver detalles" variant="primary" />}
-  >
-    <Badge label="En curso" status="info" />
-  </Card>
-);
+<Button
+  text="Guardar cambios"
+  variant="primary"
+  size="md"
+  leftIcon={<span>+</span>}
+  onClick={() => console.info('guardado')}
+/>
+```
+
+### `Badge`
+
+Props disponibles:
+
+- `label: string` obligatorio
+- `status?: "success" | "warning" | "info" | "error" | "neutral"` con default `neutral`
+- `icon?: React.ReactNode`
+
+Ejemplo:
+
+```tsx
+import { Badge } from './components'
+
+<Badge label="En curso" status="info" />
+```
+
+### `Card`
+
+Props disponibles:
+
+- `title: string` obligatorio
+- `type: "green" | "white" | "black"` obligatorio
+- `imageUrl?: string`
+- `footer?: React.ReactNode`
+- `badges?: { label: string; status?: BadgeStatus; icon?: React.ReactNode }[]`
+- `children?: React.ReactNode`
+
+Notas:
+
+- La `Card` renderiza al menos un `Badge` incluso si no recibe `badges`, usando un badge neutral por defecto.
+- `footer` esta pensado para integrar acciones principales con `Button`.
+
+Ejemplo:
+
+```tsx
+import { Button, Card } from './components'
+
+<Card
+  title="Nuevo proyecto"
+  type="white"
+  badges={[{ label: 'En curso', status: 'info' }]}
+  footer={<Button text="Ver detalles" variant="primary" />}
+>
+  <p>Resumen rapido del proyecto.</p>
+</Card>
+```
+
+## Criterios cubiertos
+
+- `Button` reutilizable con variantes, tamanos y estados opcionales.
+- `Badge` reutilizable con estados tipados e icono opcional.
+- `Card` reutilizable con `title`, `type`, `imageUrl`, `footer` y badges integrados.
+- Vista principal con un listado funcional de cards.
+- Comentarios breves en el codigo para documentar decisiones clave.
+
+## Archivos principales
+
+- `src/components/Button/Button.tsx`
+- `src/components/Badge/Badge.tsx`
+- `src/components/Card/Card.tsx`
+- `src/App.tsx`
+- `src/data/cards.ts`

@@ -1,94 +1,112 @@
-# Historia de Usuario: M5.4S2 - Autenticación, Gestión de Usuarios y Extensibilidad
+# Historia de Usuario M5.4S2
 
-## 📝 Descripción General
-Esta historia de usuario abarca el desarrollo de un sistema de autenticación modular y un motor de gestión de datos (CRUD) utilizando **React** y **TypeScript**. El enfoque principal es la aplicación de patrones avanzados como la **Programación Orientada a Objetos (POO)** y el uso de **Decoradores** para automatizar la extensión de datos, garantizando un código limpio, desacoplado y profesional.
+Aplicacion React + TypeScript para demostrar autenticacion modular, gestion CRUD de usuarios y extensibilidad con decoradores.
 
-**Story Points:** 20  
-**Estado:** Pendiente  
-**Sprint:** M5.4S2
+## Objetivo
 
----
+Implementar un flujo de login desacoplado, una clase `UserStore` con operaciones CRUD y un decorador que enriquezca automaticamente los usuarios creados con:
 
-## 🎯 Objetivo de la Historia de Usuario
-Como desarrollador frontend, quiero implementar un login modular, una clase con operaciones CRUD y un decorador para extender automáticamente los datos de usuario, de forma que el sistema sea organizado, escalable y fácil de mantener.
+- `role: "user"`
+- `createdAt: Date.now()`
 
----
+## Estructura del proyecto
 
-## 📂 Estructura de Archivos Propuesta
-Para cumplir con los criterios de modularidad, el código debe organizarse de la siguiente manera:
+```text
+week2/
+  src/
+    components/
+      Dashboard.tsx
+      Login.tsx
+    data/
+      users.ts
+    interfaces/
+      User.ts
+    utils/
+      auth.ts
+      decorators.ts
+      UserStore.ts
+    App.tsx
+    App.css
+    index.css
+    main.tsx
+  index.html
+  package.json
+  tsconfig.app.json
+  tsconfig.json
+  tsconfig.node.json
+  vite.config.ts
+```
 
-- `src/interfaces/User.ts`: Contrato de datos del usuario.
-- `src/data/users.ts`: Usuarios mock para pruebas.
-- `src/utils/auth.ts`: Lógica de autenticación.
-- `src/utils/UserStore.ts`: Clase con lógica de negocio (CRUD).
-- `src/utils/decorators.ts`: Decoradores para inyección de metadatos.
-- `src/components/Login.tsx`: Interfaz de usuario para autenticación.
+## Funcionalidades implementadas
 
----
+### TASK 1
 
-## 📋 Tareas y Criterios de Aceptación (CA)
+- Login modular con `authenticate` en `src/utils/auth.ts`.
+- Interface `User` y tipos auxiliares en `src/interfaces/User.ts`.
+- Usuarios mock centralizados en `src/data/users.ts`.
+- Mensajes de exito y error en la vista de login.
+- Redireccion a la vista principal usando navegacion por hash (`#/login` y `#/dashboard`).
 
-### TASK 1: Implementación de Login Modular
-* **CA_01:** Definir interface `User` en un archivo independiente.
-* **CA_02:** Crear un array de usuarios mock en `data/users.ts`.
-* **CA_03:** Implementar función `authenticate` en un módulo independiente.
-* **CA_04:** Validar credenciales importando el módulo en el componente Login.
-* **CA_05:** Mostrar mensajes informativos de éxito o error al usuario.
-* **CA_06:** Redirigir al usuario a la vista principal tras un login exitoso.
+### TASK 2
 
-### TASK 2: Clase CRUD y Simulación HTTP
-* **CA_07:** Implementar la clase `UserStore` en la carpeta `utils`.
-* **CA_08:** Definir métodos: `list()`, `findByName()`, `create()`, `update()`, `remove()`.
-* **CA_09:** Cada método debe emitir un log en consola simulando una llamada HTTP (GET, POST, PATCH, DELETE).
-* **CA_10:** Las operaciones deben realizarse sobre el array de usuarios importado.
+- Clase `UserStore` en `src/utils/UserStore.ts`.
+- Metodos implementados:
+  - `list()`
+  - `findByName()`
+  - `create()`
+  - `update()`
+  - `remove()`
+- Cada metodo registra en consola una simulacion HTTP:
+  - `GET`
+  - `POST`
+  - `PATCH`
+  - `DELETE`
 
-### TASK 3: Extensibilidad con Decoradores
-* **CA_11:** Crear decorador de método en `utils/decorators.ts`.
-* **CA_12:** Aplicar el decorador al método `create` dentro de `UserStore`.
-* **CA_13:** El decorador debe agregar automáticamente las propiedades:
-    * `role: "user"`
-    * `createdAt: Date.now()`
-* **CA_14:** Asegurar que el decorador no altere la funcionalidad original del método, solo enriquezca el objeto de entrada.
+### TASK 3
 
----
+- Decorador `enrichNewUser` en `src/utils/decorators.ts`.
+- Aplicado sobre `create()` en `UserStore`.
+- El decorador agrega `role` y `createdAt` antes de ejecutar la logica original del metodo.
 
-## 🛠️ Requerimientos Técnicos
+## Credenciales de prueba
 
-### Requerimientos Funcionales (RF)
-* **RF_01:** Login funcional con validación de datos.
-* **RF_02:** Organización de datos y tipos en módulos atómicos.
-* **RF_03:** Sistema CRUD con trazabilidad en consola.
-* **RF_04:** Uso de decoradores para extender propiedades de forma automática.
+Puedes iniciar sesion con cualquiera de estas cuentas mock:
 
-### Requerimientos No Funcionales (RNF)
-* **RNF_01:** Código modular y preparado para crecimiento futuro.
-* **RNF_02:** Tipado estricto (Strict Mode) en TypeScript.
-* **RNF_03:** Desacoplamiento entre la UI (Componentes) y la lógica (Clases/Utils).
-* **RNF_04:** Ejecución simple en entorno local.
+| Nombre | Correo | Contrasena | Estado |
+| --- | --- | --- | --- |
+| Ana Torres | `ana.torres@riwi.dev` | `Admin123*` | Activa |
+| Mateo Ruiz | `mateo.ruiz@riwi.dev` | `Mateo456*` | Activa |
+| Sara Jimenez | `sara.jimenez@riwi.dev` | `Sara789*` | Inactiva |
 
----
+## Como ejecutar
 
-## 🚀 Guía de Ejecución
+```bash
+bun install
+bun run dev
+```
 
-1.  **Habilitar Decoradores:** Asegúrate de que tu `tsconfig.json` incluya:
-    ```json
-    {
-      "compilerOptions": {
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
-      }
-    }
-    ```
-2.  **Instalación:**
-    ```bash
-    npm install
-    ```
-3.  **Lanzamiento:**
-    ```bash
-    npm run dev
-    ```
-4.  **Verificación:** * Prueba el login con un usuario del archivo `data`.
-    * Abre la consola del desarrollador para ver los logs de simulación HTTP.
-    * Crea un usuario nuevo y verifica que el decorador haya inyectado el `role` y la fecha de creación automáticamente.
+La aplicacion se sirve por defecto en `http://localhost:5173`.
 
----
+## Como probar la historia
+
+1. Inicia sesion con una cuenta activa.
+2. Verifica que el sistema redirige al panel principal.
+3. Abre la consola del navegador.
+4. Usa el campo de busqueda para disparar `findByName()`.
+5. Crea un usuario desde el formulario y revisa en la interfaz que aparezca con rol `user`.
+6. Confirma en consola el log `POST /users` y observa que el usuario ya incluye `role` y `createdAt`.
+7. Usa los botones `Activar/Desactivar` y `Eliminar` para validar `update()` y `remove()`.
+
+## Criterios cubiertos
+
+- `CA_01` a `CA_06`: Login modular, validacion, mensajes y redireccion.
+- `CA_07` a `CA_10`: Clase CRUD con logs HTTP simulados.
+- `CA_11` a `CA_14`: Decorador aplicado al metodo `create` sin romper su logica base.
+
+## Requerimientos cubiertos
+
+- `RF_01`: Login funcional y modular.
+- `RF_02`: Tipos e informacion organizados por modulos.
+- `RF_03`: CRUD con trazabilidad en consola.
+- `RF_04`: Extension automatica de datos con decoradores.
+- `RNF_01` a `RNF_04`: Solucion modular, tipada y facil de ejecutar localmente.

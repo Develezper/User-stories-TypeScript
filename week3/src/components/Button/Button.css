@@ -1,0 +1,87 @@
+.ui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border: 0;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    opacity 180ms ease,
+    background-color 180ms ease;
+  cursor: pointer;
+}
+
+.ui-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.ui-button:focus-visible {
+  outline: 3px solid rgba(84, 130, 255, 0.38);
+  outline-offset: 3px;
+}
+
+.ui-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+  transform: none;
+}
+
+.ui-button svg,
+.ui-button__spinner {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.ui-button__spinner {
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 999px;
+  animation: button-spin 700ms linear infinite;
+}
+
+.ui-button--sm {
+  min-height: 2.4rem;
+  padding: 0.65rem 0.95rem;
+  font-size: 0.85rem;
+}
+
+.ui-button--md {
+  min-height: 2.8rem;
+  padding: 0.8rem 1.2rem;
+  font-size: 0.92rem;
+}
+
+.ui-button--lg {
+  min-height: 3.15rem;
+  padding: 0.95rem 1.4rem;
+  font-size: 1rem;
+}
+
+.ui-button--primary {
+  background: linear-gradient(135deg, #1c8f4d 0%, #14653a 100%);
+  color: #f4fff8;
+  box-shadow: 0 16px 32px rgba(20, 101, 58, 0.24);
+}
+
+.ui-button--secondary {
+  background: #f5f1e8;
+  color: #342816;
+  box-shadow: inset 0 0 0 1px rgba(52, 40, 22, 0.12);
+}
+
+.ui-button--danger {
+  background: linear-gradient(135deg, #ce4638 0%, #a12c20 100%);
+  color: #fff6f4;
+  box-shadow: 0 16px 32px rgba(161, 44, 32, 0.24);
+}
+
+@keyframes button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

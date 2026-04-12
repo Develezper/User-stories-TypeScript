@@ -1,0 +1,78 @@
+.ui-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(18, 33, 23, 0.08);
+  box-shadow: 0 18px 45px rgba(30, 54, 41, 0.12);
+}
+
+.ui-card--white {
+  background: rgba(255, 255, 255, 0.9);
+  color: #122117;
+}
+
+.ui-card--green {
+  background: linear-gradient(180deg, #f6fff2 0%, #e3f3da 100%);
+  color: #16311f;
+}
+
+.ui-card--black {
+  background: linear-gradient(180deg, #18241b 0%, #0f1711 100%);
+  color: #f6fff1;
+}
+
+.ui-card__media {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.ui-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ui-card__content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.35rem;
+}
+
+.ui-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.ui-card h2 {
+  margin: 0;
+  font-size: 1.45rem;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.ui-card__body {
+  flex: 1;
+}
+
+.ui-card__body p {
+  margin: 0;
+}
+
+.ui-card__footer {
+  margin-top: auto;
+}
+
+.ui-card--black .ui-badge--neutral {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ecf5e8;
+}
+
+.ui-card--black .ui-card__body,
+.ui-card--black .ui-card__body p {
+  color: rgba(246, 255, 241, 0.8);
+}
