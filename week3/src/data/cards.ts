@@ -1,4 +1,4 @@
-import type { ButtonVariant } from '../components/Button'
+import type { ButtonSize, ButtonVariant } from '../components/Button'
 import type { CardBadge, CardType } from '../components/Card'
 
 export type CardId = 'ops-dashboard' | 'risk-alerts' | 'campaign-recap' | 'sync-state'
@@ -19,6 +19,7 @@ export interface CardView {
   badges: CardBadge[]
   buttonText: string
   buttonVariant: ButtonVariant
+  buttonSize: ButtonSize
   buttonDisabled?: boolean
   bucket: CardBucket
   action?: CardAction
@@ -61,6 +62,7 @@ export const cardExamples: CardExample[] = [
         ],
         buttonText: 'Marcar revision',
         buttonVariant: 'primary',
+        buttonSize: 'md',
         bucket: 'active',
         action: {
           type: 'instant',
@@ -77,6 +79,7 @@ export const cardExamples: CardExample[] = [
         ],
         buttonText: 'Revisado',
         buttonVariant: 'secondary',
+        buttonSize: 'md',
         buttonDisabled: true,
         bucket: 'done',
       },
@@ -97,6 +100,7 @@ export const cardExamples: CardExample[] = [
         ],
         buttonText: 'Tomar revision',
         buttonVariant: 'danger',
+        buttonSize: 'lg',
         bucket: 'attention',
         action: {
           type: 'timed',
@@ -115,6 +119,7 @@ export const cardExamples: CardExample[] = [
         ],
         buttonText: 'Marcar resuelto',
         buttonVariant: 'secondary',
+        buttonSize: 'md',
         bucket: 'active',
         action: {
           type: 'instant',
@@ -131,6 +136,7 @@ export const cardExamples: CardExample[] = [
         ],
         buttonText: 'Resuelto',
         buttonVariant: 'secondary',
+        buttonSize: 'md',
         buttonDisabled: true,
         bucket: 'done',
       },
@@ -151,6 +157,7 @@ export const cardExamples: CardExample[] = [
         ],
         buttonText: 'Compartir resumen',
         buttonVariant: 'secondary',
+        buttonSize: 'sm',
         bucket: 'active',
         action: {
           type: 'instant',
@@ -167,6 +174,7 @@ export const cardExamples: CardExample[] = [
         ],
         buttonText: 'Compartido',
         buttonVariant: 'secondary',
+        buttonSize: 'sm',
         buttonDisabled: true,
         bucket: 'done',
       },
@@ -187,6 +195,7 @@ export const cardExamples: CardExample[] = [
         ],
         buttonText: 'Actualizar ahora',
         buttonVariant: 'primary',
+        buttonSize: 'md',
         bucket: 'active',
         action: {
           type: 'timed',
@@ -205,6 +214,7 @@ export const cardExamples: CardExample[] = [
         ],
         buttonText: 'Actualizado',
         buttonVariant: 'secondary',
+        buttonSize: 'md',
         buttonDisabled: true,
         bucket: 'done',
       },

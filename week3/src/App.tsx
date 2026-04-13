@@ -204,7 +204,7 @@ function App() {
                   <Button
                     text={card.view.buttonText}
                     variant={card.view.buttonVariant}
-                    size="md"
+                    size={card.view.buttonSize}
                     disabled={card.view.buttonDisabled}
                     loading={loadingCardId === card.id}
                     leftIcon={<SparkIcon />}
