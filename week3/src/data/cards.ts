@@ -85,9 +85,8 @@ export const cardExamples: CardExample[] = [
       { label: 'En progreso', status: 'info' },
       { label: 'Catalogo', status: 'neutral' },
     ],
-    buttonText: 'Actualizando',
+    buttonText: 'Actualizar ahora',
     buttonVariant: 'primary',
     buttonSize: 'md',
-    buttonLoading: true,
   },
 ]

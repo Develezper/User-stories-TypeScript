@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import './App.css'
 import { Button, Card, type BadgeStatus } from './components'
 import { cardExamples } from './data/cards'
@@ -94,6 +94,16 @@ function App() {
   const [lastAction, setLastAction] = useState(
     'Elige una tarjeta para ver su detalle o lanzar una accion.'
   )
+  const [loadingCardId, setLoadingCardId] = useState<string | null>(null)
+  const loadingTimeoutRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (loadingTimeoutRef.current !== null) {
+        window.clearTimeout(loadingTimeoutRef.current)
+      }
+    }
+  }, [])
 
   const visibleCards = cardExamples.filter((card) => {
     if (activeFilter === 'all') return true
@@ -108,6 +118,27 @@ function App() {
   })
 
   const activeFilterLabel = filterOptions.find((filter) => filter.id === activeFilter)?.helper
+
+  const handleCardAction = (cardId: string, cardTitle: string) => {
+    if (cardId === 'sync-state') {
+      if (loadingTimeoutRef.current !== null) {
+        window.clearTimeout(loadingTimeoutRef.current)
+      }
+
+      setLoadingCardId(cardId)
+      setLastAction('Estamos actualizando tu catalogo. Esto solo tomara un momento.')
+
+      loadingTimeoutRef.current = window.setTimeout(() => {
+        setLoadingCardId(null)
+        setLastAction('Tu catalogo ya esta listo y actualizado.')
+        loadingTimeoutRef.current = null
+      }, 1800)
+
+      return
+    }
+
+    setLastAction(`Abriste "${cardTitle}" para continuar con esa gestion.`)
+  }
 
   return (
     <main className="app-shell">
@@ -164,10 +195,10 @@ function App() {
                   variant={card.buttonVariant}
                   size={card.buttonSize}
                   disabled={card.buttonDisabled}
-                  loading={card.buttonLoading}
+                  loading={loadingCardId === card.id}
                   leftIcon={<SparkIcon />}
-                  rightIcon={card.buttonLoading ? undefined : <ArrowIcon />}
-                  onClick={() => setLastAction(`Abriste "${card.title}" para continuar con esa gestion.`)}
+                  rightIcon={loadingCardId === card.id ? undefined : <ArrowIcon />}
+                  onClick={() => handleCardAction(card.id, card.title)}
                 />
               }
             >
