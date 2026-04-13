@@ -40,7 +40,7 @@ export const Button = ({
       type="button"
     >
       {loading ? <span className="ui-button__spinner" aria-hidden="true" /> : leftIcon}
-      <span>{loading ? 'Cargando...' : text}</span>
+      <span>{loading ? 'Un momento...' : text}</span>
       {!loading ? rightIcon : null}
     </button>
   )

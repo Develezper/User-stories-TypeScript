@@ -76,16 +76,16 @@ export const cardExamples: CardExample[] = [
   },
   {
     id: 'sync-state',
-    title: 'Sincronizacion de catalogo',
+    title: 'Tu catalogo se esta actualizando',
     description:
-      'Sigue el proceso en curso sin tener que entrar a otra vista mientras termina de actualizarse.',
+      'Todo sigue avanzando en segundo plano mientras tu puedes continuar con tranquilidad.',
     type: 'white',
     imageUrl: createCover('Automatizacion activa', '#F5F9FF', '#4A7EF0', '#17304F'),
     badges: [
-      { label: 'Procesando', status: 'info' },
-      { label: 'Actualizacion', status: 'neutral' },
+      { label: 'En progreso', status: 'info' },
+      { label: 'Catalogo', status: 'neutral' },
     ],
-    buttonText: 'Sincronizando',
+    buttonText: 'Actualizando',
     buttonVariant: 'primary',
     buttonSize: 'md',
     buttonLoading: true,
