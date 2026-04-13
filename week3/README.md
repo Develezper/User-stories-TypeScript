@@ -1,15 +1,15 @@
-# Historia de Usuario M5.4S3
+# User Story M5.4S3
 
-Implementacion de componentes UI reutilizables (`Button`, `Badge` y `Card`) con props tipadas en TypeScript para React.
+Implementation of reusable UI components (`Button`, `Badge`, and `Card`) with strongly typed TypeScript props for React.
 
-## Objetivo
+## Objective
 
-Construir una mini interfaz demostrativa que garantice:
+Build a small interface that guarantees:
 
-- consistencia visual
-- tipado fuerte
-- componentes modulares
-- una vista principal con cards que integran badges y botones
+- visual consistency
+- strong typing
+- modular components
+- a main view with cards that integrate badges and buttons
 
 ## Stack
 
@@ -18,7 +18,7 @@ Construir una mini interfaz demostrativa que garantice:
 - Vite
 - ESLint
 
-## Estructura
+## Structure
 
 ```text
 week3/
@@ -35,105 +35,105 @@ week3/
 `-- README.md
 ```
 
-## Como ejecutar
+## How to Run
 
 ```bash
 bun install
 bun run dev
 ```
 
-Para validar el proyecto:
+To validate the project:
 
 ```bash
 bun run build
 bun run lint
 ```
 
-## Componentes
+## Components
 
 ### `Button`
 
-Props disponibles:
+Available props:
 
-- `text: string` obligatorio
-- `variant?: "primary" | "secondary" | "danger"` con default `primary`
-- `size?: "sm" | "md" | "lg"` con default `md`
+- `text: string` required
+- `variant?: "primary" | "secondary" | "danger"` with default `primary`
+- `size?: "sm" | "md" | "lg"` with default `md`
 - `disabled?: boolean`
 - `loading?: boolean`
 - `leftIcon?: React.ReactNode`
 - `rightIcon?: React.ReactNode`
 - `onClick?: MouseEventHandler<HTMLButtonElement>`
 
-Ejemplo:
+Example:
 
 ```tsx
 import { Button } from './components'
 
 <Button
-  text="Guardar cambios"
+  text="Save changes"
   variant="primary"
   size="md"
   leftIcon={<span>+</span>}
-  onClick={() => console.info('guardado')}
+  onClick={() => console.info('saved')}
 />
 ```
 
 ### `Badge`
 
-Props disponibles:
+Available props:
 
-- `label: string` obligatorio
-- `status?: "success" | "warning" | "info" | "error" | "neutral"` con default `neutral`
+- `label: string` required
+- `status?: "success" | "warning" | "info" | "error" | "neutral"` with default `neutral`
 - `icon?: React.ReactNode`
 
-Ejemplo:
+Example:
 
 ```tsx
 import { Badge } from './components'
 
-<Badge label="En curso" status="info" />
+<Badge label="In progress" status="info" />
 ```
 
 ### `Card`
 
-Props disponibles:
+Available props:
 
-- `title: string` obligatorio
-- `type: "green" | "white" | "black"` obligatorio
+- `title: string` required
+- `type: "green" | "white" | "black"` required
 - `imageUrl?: string`
 - `footer?: React.ReactNode`
 - `badges?: { label: string; status?: BadgeStatus; icon?: React.ReactNode }[]`
 - `children?: React.ReactNode`
 
-Notas:
+Notes:
 
-- La `Card` renderiza al menos un `Badge` incluso si no recibe `badges`, usando un badge neutral por defecto.
-- `footer` esta pensado para integrar acciones principales con `Button`.
+- `Card` renders at least one `Badge` even if no `badges` prop is provided, using a default neutral badge.
+- `footer` is designed to host primary actions such as `Button`.
 
-Ejemplo:
+Example:
 
 ```tsx
 import { Button, Card } from './components'
 
 <Card
-  title="Nuevo proyecto"
+  title="New project"
   type="white"
-  badges={[{ label: 'En curso', status: 'info' }]}
-  footer={<Button text="Ver detalles" variant="primary" />}
+  badges={[{ label: 'In progress', status: 'info' }]}
+  footer={<Button text="View details" variant="primary" />}
 >
-  <p>Resumen rapido del proyecto.</p>
+  <p>Quick project summary.</p>
 </Card>
 ```
 
-## Criterios cubiertos
+## Covered Criteria
 
-- `Button` reutilizable con variantes, tamanos y estados opcionales.
-- `Badge` reutilizable con estados tipados e icono opcional.
-- `Card` reutilizable con `title`, `type`, `imageUrl`, `footer` y badges integrados.
-- Vista principal con un listado funcional de cards.
-- Comentarios breves en el codigo para documentar decisiones clave.
+- Reusable `Button` with variants, sizes, and optional states.
+- Reusable `Badge` with typed statuses and optional icon support.
+- Reusable `Card` with `title`, `type`, `imageUrl`, `footer`, and integrated badges.
+- Functional main view displaying a list of cards.
+- Brief code comments documenting key implementation decisions.
 
-## Archivos principales
+## Main Files
 
 - `src/components/Button/Button.tsx`
 - `src/components/Badge/Badge.tsx`
