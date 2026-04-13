@@ -80,29 +80,71 @@ const badgeIcons: Record<BadgeStatus, ReactNode> = {
   neutral: <LayersIcon />,
 }
 
+type ViewFilter = 'all' | 'attention' | 'active' | 'done'
+
+const filterOptions: { id: ViewFilter; label: string; helper: string }[] = [
+  { id: 'all', label: 'Todo', helper: 'Una vista general con todas las tarjetas.' },
+  { id: 'attention', label: 'Prioritario', helper: 'Casos que necesitan atencion inmediata.' },
+  { id: 'active', label: 'En marcha', helper: 'Procesos avanzando en este momento.' },
+  { id: 'done', label: 'Listo', helper: 'Resultados completados y listos para compartir.' },
+]
+
 function App() {
-  const [lastAction, setLastAction] = useState('Aun no se ha ejecutado ninguna accion.')
+  const [activeFilter, setActiveFilter] = useState<ViewFilter>('all')
+  const [lastAction, setLastAction] = useState(
+    'Elige una tarjeta para ver su detalle o lanzar una accion.'
+  )
+
+  const visibleCards = cardExamples.filter((card) => {
+    if (activeFilter === 'all') return true
+
+    const statuses = card.badges.map((badge) => badge.status)
+
+    if (activeFilter === 'attention') return statuses.includes('error') || statuses.includes('warning')
+    if (activeFilter === 'active') return statuses.includes('info')
+    if (activeFilter === 'done') return statuses.includes('success')
+
+    return true
+  })
+
+  const activeFilterLabel = filterOptions.find((filter) => filter.id === activeFilter)?.helper
 
   return (
     <main className="app-shell">
       <section className="hero">
         <div className="hero__copy">
-          <p className="hero__eyebrow">Semana 3 - M5.4S3</p>
-          <h1>Componentes UI reutilizables con React + TypeScript</h1>
+          <p className="hero__eyebrow">Tu panel de hoy</p>
+          <h1>Todo lo importante, claro y al alcance de un clic.</h1>
           <p className="hero__description">
-            Esta vista demuestra un set de componentes tipados pensado para mantener una interfaz
-            consistente, extensible y facil de reutilizar.
+            Revisa lo urgente, sigue lo que va en camino y entra rapido a cada tarea sin perderte
+            entre pantallas.
           </p>
+
+          <div className="hero__filters" aria-label="Filtros de vista">
+            {filterOptions.map((filter) => (
+              <button
+                key={filter.id}
+                type="button"
+                className={`hero__filter ${activeFilter === filter.id ? 'hero__filter--active' : ''}`}
+                onClick={() => setActiveFilter(filter.id)}
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
+
+          <p className="hero__helper">{activeFilterLabel}</p>
         </div>
 
         <article className="hero__status">
-          <p className="hero__status-label">Ultima accion</p>
+          <p className="hero__status-label">Actividad reciente</p>
+          <p className="hero__status-count">{visibleCards.length} opciones visibles</p>
           <p className="hero__status-value">{lastAction}</p>
         </article>
       </section>
 
       <section className="gallery">
-        {cardExamples.map((card) => {
+        {visibleCards.map((card) => {
           // Centralizamos los iconos de badge en la vista para reutilizar el mismo componente.
           const badgesWithIcons = card.badges.map((badge) => ({
             ...badge,
@@ -125,7 +167,7 @@ function App() {
                   loading={card.buttonLoading}
                   leftIcon={<SparkIcon />}
                   rightIcon={card.buttonLoading ? undefined : <ArrowIcon />}
-                  onClick={() => setLastAction(`Accion ejecutada en: ${card.title}`)}
+                  onClick={() => setLastAction(`Abriste "${card.title}" para continuar con esa gestion.`)}
                 />
               }
             >

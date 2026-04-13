@@ -23,8 +23,8 @@ const createCover = (eyebrow: string, background: string, accent: string, textCo
       <circle cx="180" cy="400" r="160" fill="${accent}" fill-opacity="0.18" />
       <rect x="72" y="82" width="228" height="46" rx="23" fill="${accent}" fill-opacity="0.16" />
       <text x="92" y="112" fill="${textColor}" font-family="Arial, sans-serif" font-size="20" font-weight="700">${eyebrow}</text>
-      <text x="72" y="264" fill="${textColor}" font-family="Arial, sans-serif" font-size="78" font-weight="700">Reusable UI</text>
-      <text x="72" y="330" fill="${textColor}" font-family="Arial, sans-serif" font-size="34" font-weight="400">Cards con Badge + Button integrados</text>
+      <text x="72" y="264" fill="${textColor}" font-family="Arial, sans-serif" font-size="78" font-weight="700">Vista clara</text>
+      <text x="72" y="330" fill="${textColor}" font-family="Arial, sans-serif" font-size="34" font-weight="400">Acciones rapidas para tu dia</text>
     </svg>
   `)}`
 
@@ -33,12 +33,12 @@ export const cardExamples: CardExample[] = [
     id: 'ops-dashboard',
     title: 'Seguimiento de entregas',
     description:
-      'Combina badges de estado y un boton principal para revisar el avance semanal del equipo de operaciones.',
+      'Consulta en segundos como va el avance del equipo y entra directo al tablero principal.',
     type: 'white',
     imageUrl: createCover('Sprint en curso', '#F8FBF4', '#7BB661', '#183121'),
     badges: [
       { label: 'En curso', status: 'info' },
-      { label: 'Sprint 3', status: 'neutral' },
+      { label: 'Esta semana', status: 'neutral' },
     ],
     buttonText: 'Ver tablero',
     buttonVariant: 'primary',
@@ -48,7 +48,7 @@ export const cardExamples: CardExample[] = [
     id: 'risk-alerts',
     title: 'Alertas de pago',
     description:
-      'Ejemplo de card oscura con accion destacada para abordar incidentes de cobro antes del cierre diario.',
+      'Encuentra los casos mas delicados del dia y atiendelos antes de que se acumulen.',
     type: 'black',
     imageUrl: createCover('Atencion inmediata', '#101912', '#E86957', '#F7FFF3'),
     badges: [
@@ -63,7 +63,7 @@ export const cardExamples: CardExample[] = [
     id: 'campaign-recap',
     title: 'Campana sostenible',
     description:
-      'La card verde usa un badge de exito y un boton secundario para resaltar resultados completados.',
+      'Mira los resultados listos para compartir con el equipo o presentar a cliente.',
     type: 'green',
     imageUrl: createCover('Resultado listo', '#E8F7DE', '#2A9D62', '#1C351F'),
     badges: [
@@ -78,12 +78,12 @@ export const cardExamples: CardExample[] = [
     id: 'sync-state',
     title: 'Sincronizacion de catalogo',
     description:
-      'Tambien se ilustra el estado loading del boton para procesos que ya se encuentran ejecutandose.',
+      'Sigue el proceso en curso sin tener que entrar a otra vista mientras termina de actualizarse.',
     type: 'white',
     imageUrl: createCover('Automatizacion activa', '#F5F9FF', '#4A7EF0', '#17304F'),
     badges: [
       { label: 'Procesando', status: 'info' },
-      { label: 'Sincronia', status: 'neutral' },
+      { label: 'Actualizacion', status: 'neutral' },
     ],
     buttonText: 'Sincronizando',
     buttonVariant: 'primary',
