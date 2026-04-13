@@ -1,18 +1,35 @@
+import type { ButtonVariant } from '../components/Button'
 import type { CardBadge, CardType } from '../components/Card'
-import type { ButtonSize, ButtonVariant } from '../components/Button'
 
-export interface CardExample {
-  id: string
+export type CardId = 'ops-dashboard' | 'risk-alerts' | 'campaign-recap' | 'sync-state'
+export type CardState = 'pending' | 'attention' | 'reviewing' | 'ready' | 'shared' | 'done'
+export type CardBucket = 'attention' | 'active' | 'done'
+
+export interface CardAction {
+  type: 'instant' | 'timed'
+  nextState: CardState
+  completedMessage: string
+  pendingMessage?: string
+  delayMs?: number
+}
+
+export interface CardView {
   title: string
   description: string
-  type: CardType
-  imageUrl?: string
   badges: CardBadge[]
   buttonText: string
   buttonVariant: ButtonVariant
-  buttonSize?: ButtonSize
   buttonDisabled?: boolean
-  buttonLoading?: boolean
+  bucket: CardBucket
+  action?: CardAction
+}
+
+export interface CardExample {
+  id: CardId
+  type: CardType
+  imageUrl?: string
+  initialState: CardState
+  states: Partial<Record<CardState, CardView>>
 }
 
 const createCover = (eyebrow: string, background: string, accent: string, textColor: string) =>
@@ -31,62 +48,166 @@ const createCover = (eyebrow: string, background: string, accent: string, textCo
 export const cardExamples: CardExample[] = [
   {
     id: 'ops-dashboard',
-    title: 'Seguimiento de entregas',
-    description:
-      'Consulta en segundos como va el avance del equipo y entra directo al tablero principal.',
     type: 'white',
     imageUrl: createCover('Sprint en curso', '#F8FBF4', '#7BB661', '#183121'),
-    badges: [
-      { label: 'En curso', status: 'info' },
-      { label: 'Esta semana', status: 'neutral' },
-    ],
-    buttonText: 'Ver tablero',
-    buttonVariant: 'primary',
-    buttonSize: 'md',
+    initialState: 'pending',
+    states: {
+      pending: {
+        title: 'Seguimiento de entregas',
+        description: 'Revisa el avance de la semana y confirma que todo este marchando como esperas.',
+        badges: [
+          { label: 'Pendiente', status: 'info' },
+          { label: 'Esta semana', status: 'neutral' },
+        ],
+        buttonText: 'Marcar revision',
+        buttonVariant: 'primary',
+        bucket: 'active',
+        action: {
+          type: 'instant',
+          nextState: 'done',
+          completedMessage: 'La revision de entregas ya quedo completada.',
+        },
+      },
+      done: {
+        title: 'Seguimiento de entregas',
+        description: 'La revision de esta semana ya quedo lista y el equipo puede continuar.',
+        badges: [
+          { label: 'Revisado', status: 'success' },
+          { label: 'Esta semana', status: 'neutral' },
+        ],
+        buttonText: 'Revisado',
+        buttonVariant: 'secondary',
+        buttonDisabled: true,
+        bucket: 'done',
+      },
+    },
   },
   {
     id: 'risk-alerts',
-    title: 'Alertas de pago',
-    description:
-      'Encuentra los casos mas delicados del dia y atiendelos antes de que se acumulen.',
     type: 'black',
     imageUrl: createCover('Atencion inmediata', '#101912', '#E86957', '#F7FFF3'),
-    badges: [
-      { label: 'Urgente', status: 'error' },
-      { label: 'Riesgo alto', status: 'warning' },
-    ],
-    buttonText: 'Revisar casos',
-    buttonVariant: 'danger',
-    buttonSize: 'lg',
+    initialState: 'attention',
+    states: {
+      attention: {
+        title: 'Alertas de pago',
+        description: 'Atiendes primero los casos mas delicados para evitar retrasos en el cierre.',
+        badges: [
+          { label: 'Urgente', status: 'error' },
+          { label: 'Riesgo alto', status: 'warning' },
+        ],
+        buttonText: 'Tomar revision',
+        buttonVariant: 'danger',
+        bucket: 'attention',
+        action: {
+          type: 'timed',
+          nextState: 'reviewing',
+          pendingMessage: 'Estamos preparando los casos prioritarios para revisarlos con calma.',
+          completedMessage: 'Las alertas ya quedaron listas para revision.',
+          delayMs: 1300,
+        },
+      },
+      reviewing: {
+        title: 'Alertas de pago',
+        description: 'Los casos urgentes ya quedaron agrupados y solo falta cerrar la revision.',
+        badges: [
+          { label: 'En revision', status: 'info' },
+          { label: '4 casos', status: 'neutral' },
+        ],
+        buttonText: 'Marcar resuelto',
+        buttonVariant: 'secondary',
+        bucket: 'active',
+        action: {
+          type: 'instant',
+          nextState: 'done',
+          completedMessage: 'Las alertas de pago ya quedaron resueltas.',
+        },
+      },
+      done: {
+        title: 'Alertas de pago',
+        description: 'Las alertas prioritarias de hoy ya fueron atendidas.',
+        badges: [
+          { label: 'Resuelto', status: 'success' },
+          { label: 'Sin pendientes', status: 'neutral' },
+        ],
+        buttonText: 'Resuelto',
+        buttonVariant: 'secondary',
+        buttonDisabled: true,
+        bucket: 'done',
+      },
+    },
   },
   {
     id: 'campaign-recap',
-    title: 'Campana sostenible',
-    description:
-      'Mira los resultados listos para compartir con el equipo o presentar a cliente.',
     type: 'green',
     imageUrl: createCover('Resultado listo', '#E8F7DE', '#2A9D62', '#1C351F'),
-    badges: [
-      { label: 'Completado', status: 'success' },
-      { label: 'Marketing', status: 'neutral' },
-    ],
-    buttonText: 'Compartir resumen',
-    buttonVariant: 'secondary',
-    buttonSize: 'sm',
+    initialState: 'ready',
+    states: {
+      ready: {
+        title: 'Campana sostenible',
+        description: 'El resumen esta listo para enviarse al equipo o presentarse a cliente.',
+        badges: [
+          { label: 'Listo para compartir', status: 'info' },
+          { label: 'Marketing', status: 'neutral' },
+        ],
+        buttonText: 'Compartir resumen',
+        buttonVariant: 'secondary',
+        bucket: 'active',
+        action: {
+          type: 'instant',
+          nextState: 'shared',
+          completedMessage: 'El resumen de la campana ya fue compartido.',
+        },
+      },
+      shared: {
+        title: 'Campana sostenible',
+        description: 'El resumen ya fue compartido y el equipo puede consultarlo cuando lo necesite.',
+        badges: [
+          { label: 'Compartido', status: 'success' },
+          { label: 'Marketing', status: 'neutral' },
+        ],
+        buttonText: 'Compartido',
+        buttonVariant: 'secondary',
+        buttonDisabled: true,
+        bucket: 'done',
+      },
+    },
   },
   {
     id: 'sync-state',
-    title: 'Tu catalogo se esta actualizando',
-    description:
-      'Todo sigue avanzando en segundo plano mientras tu puedes continuar con tranquilidad.',
     type: 'white',
     imageUrl: createCover('Automatizacion activa', '#F5F9FF', '#4A7EF0', '#17304F'),
-    badges: [
-      { label: 'En progreso', status: 'info' },
-      { label: 'Catalogo', status: 'neutral' },
-    ],
-    buttonText: 'Actualizar ahora',
-    buttonVariant: 'primary',
-    buttonSize: 'md',
+    initialState: 'pending',
+    states: {
+      pending: {
+        title: 'Actualiza tu catalogo',
+        description: 'Lanza la actualizacion cuando quieras y sigue trabajando mientras el proceso termina.',
+        badges: [
+          { label: 'Pendiente', status: 'info' },
+          { label: 'Catalogo', status: 'neutral' },
+        ],
+        buttonText: 'Actualizar ahora',
+        buttonVariant: 'primary',
+        bucket: 'active',
+        action: {
+          type: 'timed',
+          nextState: 'done',
+          pendingMessage: 'Estamos actualizando tu catalogo. Puedes seguir aqui mientras termina.',
+          completedMessage: 'Tu catalogo ya quedo actualizado.',
+          delayMs: 1800,
+        },
+      },
+      done: {
+        title: 'Catalogo actualizado',
+        description: 'Los cambios mas recientes ya quedaron aplicados y no hace falta esperar mas.',
+        badges: [
+          { label: 'Actualizado', status: 'success' },
+          { label: 'Catalogo', status: 'neutral' },
+        ],
+        buttonText: 'Actualizado',
+        buttonVariant: 'secondary',
+        buttonDisabled: true,
+        bucket: 'done',
+      },
+    },
   },
 ]

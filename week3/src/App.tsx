@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import './App.css'
 import { Button, Card, type BadgeStatus } from './components'
-import { cardExamples } from './data/cards'
+import { cardExamples, type CardAction, type CardExample, type CardId, type CardState } from './data/cards'
 
 const ArrowIcon = () => (
   <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -83,18 +83,31 @@ const badgeIcons: Record<BadgeStatus, ReactNode> = {
 type ViewFilter = 'all' | 'attention' | 'active' | 'done'
 
 const filterOptions: { id: ViewFilter; label: string; helper: string }[] = [
-  { id: 'all', label: 'Todo', helper: 'Una vista general con todas las tarjetas.' },
-  { id: 'attention', label: 'Prioritario', helper: 'Casos que necesitan atencion inmediata.' },
-  { id: 'active', label: 'En marcha', helper: 'Procesos avanzando en este momento.' },
-  { id: 'done', label: 'Listo', helper: 'Resultados completados y listos para compartir.' },
+  { id: 'all', label: 'Todo', helper: 'Una vista general con todas las tareas.' },
+  { id: 'attention', label: 'Por atender', helper: 'Lo que necesita una respuesta inmediata.' },
+  { id: 'active', label: 'En proceso', helper: 'Acciones que siguen abiertas o en marcha.' },
+  { id: 'done', label: 'Resuelto', helper: 'Tareas que ya quedaron listas.' },
 ]
 
+const initialCardStates = Object.fromEntries(
+  cardExamples.map((card) => [card.id, card.initialState])
+) as Record<CardId, CardState>
+
+const getCardView = (card: CardExample, currentState: CardState) => {
+  const view = card.states[currentState]
+
+  if (!view) {
+    throw new Error(`No hay configuracion para ${card.id} en el estado ${currentState}.`)
+  }
+
+  return view
+}
+
 function App() {
+  const [cardStates, setCardStates] = useState<Record<CardId, CardState>>(initialCardStates)
   const [activeFilter, setActiveFilter] = useState<ViewFilter>('all')
-  const [lastAction, setLastAction] = useState(
-    'Elige una tarjeta para ver su detalle o lanzar una accion.'
-  )
-  const [loadingCardId, setLoadingCardId] = useState<string | null>(null)
+  const [lastAction, setLastAction] = useState<string | null>(null)
+  const [loadingCardId, setLoadingCardId] = useState<CardId | null>(null)
   const loadingTimeoutRef = useRef<number | null>(null)
 
   useEffect(() => {
@@ -105,39 +118,42 @@ function App() {
     }
   }, [])
 
-  const visibleCards = cardExamples.filter((card) => {
+  const cardViews = cardExamples.map((card) => ({
+    ...card,
+    view: getCardView(card, cardStates[card.id]),
+  }))
+
+  const visibleCards = cardViews.filter((card) => {
     if (activeFilter === 'all') return true
-
-    const statuses = card.badges.map((badge) => badge.status)
-
-    if (activeFilter === 'attention') return statuses.includes('error') || statuses.includes('warning')
-    if (activeFilter === 'active') return statuses.includes('info')
-    if (activeFilter === 'done') return statuses.includes('success')
-
-    return true
+    return card.view.bucket === activeFilter
   })
 
-  const activeFilterLabel = filterOptions.find((filter) => filter.id === activeFilter)?.helper
-
-  const handleCardAction = (cardId: string, cardTitle: string) => {
-    if (cardId === 'sync-state') {
-      if (loadingTimeoutRef.current !== null) {
-        window.clearTimeout(loadingTimeoutRef.current)
-      }
-
-      setLoadingCardId(cardId)
-      setLastAction('Estamos actualizando tu catalogo. Esto solo tomara un momento.')
-
-      loadingTimeoutRef.current = window.setTimeout(() => {
-        setLoadingCardId(null)
-        setLastAction('Tu catalogo ya esta listo y actualizado.')
-        loadingTimeoutRef.current = null
-      }, 1800)
-
+  const runAction = (cardId: CardId, action: CardAction) => {
+    if (action.type === 'instant') {
+      setCardStates((currentStates) => ({
+        ...currentStates,
+        [cardId]: action.nextState,
+      }))
+      setLastAction(action.completedMessage)
       return
     }
 
-    setLastAction(`Abriste "${cardTitle}" para continuar con esa gestion.`)
+    if (loadingTimeoutRef.current !== null) {
+      window.clearTimeout(loadingTimeoutRef.current)
+    }
+
+    setLoadingCardId(cardId)
+    setLastAction(action.pendingMessage ?? null)
+
+    loadingTimeoutRef.current = window.setTimeout(() => {
+      setCardStates((currentStates) => ({
+        ...currentStates,
+        [cardId]: action.nextState,
+      }))
+      setLoadingCardId(null)
+      setLastAction(action.completedMessage)
+      loadingTimeoutRef.current = null
+    }, action.delayMs ?? 1500)
   }
 
   return (
@@ -147,8 +163,8 @@ function App() {
           <p className="hero__eyebrow">Tu panel de hoy</p>
           <h1>Todo lo importante, claro y al alcance de un clic.</h1>
           <p className="hero__description">
-            Revisa lo urgente, sigue lo que va en camino y entra rapido a cada tarea sin perderte
-            entre pantallas.
+            Organiza tus tareas por prioridad, avanza las que siguen abiertas y deja que cada
+            tarjeta refleje su estado real.
           </p>
 
           <div className="hero__filters" aria-label="Filtros de vista">
@@ -164,48 +180,54 @@ function App() {
             ))}
           </div>
 
-          <p className="hero__helper">{activeFilterLabel}</p>
+          <p className="hero__helper">{filterOptions.find((filter) => filter.id === activeFilter)?.helper}</p>
+          {lastAction ? <p className="hero__feedback">{lastAction}</p> : null}
         </div>
-
-        <article className="hero__status">
-          <p className="hero__status-label">Actividad reciente</p>
-          <p className="hero__status-count">{visibleCards.length} opciones visibles</p>
-          <p className="hero__status-value">{lastAction}</p>
-        </article>
       </section>
 
       <section className="gallery">
-        {visibleCards.map((card) => {
-          // Centralizamos los iconos de badge en la vista para reutilizar el mismo componente.
-          const badgesWithIcons = card.badges.map((badge) => ({
-            ...badge,
-            icon: badge.status ? badgeIcons[badge.status] : badgeIcons.neutral,
-          }))
+        {visibleCards.length ? (
+          visibleCards.map((card) => {
+            const badgesWithIcons = card.view.badges.map((badge) => ({
+              ...badge,
+              icon: badge.status ? badgeIcons[badge.status] : badgeIcons.neutral,
+            }))
 
-          return (
-            <Card
-              key={card.id}
-              title={card.title}
-              type={card.type}
-              imageUrl={card.imageUrl}
-              badges={badgesWithIcons}
-              footer={
-                <Button
-                  text={card.buttonText}
-                  variant={card.buttonVariant}
-                  size={card.buttonSize}
-                  disabled={card.buttonDisabled}
-                  loading={loadingCardId === card.id}
-                  leftIcon={<SparkIcon />}
-                  rightIcon={loadingCardId === card.id ? undefined : <ArrowIcon />}
-                  onClick={() => handleCardAction(card.id, card.title)}
-                />
-              }
-            >
-              <p className="card-copy">{card.description}</p>
-            </Card>
-          )
-        })}
+            return (
+              <Card
+                key={card.id}
+                title={card.view.title}
+                type={card.type}
+                imageUrl={card.imageUrl}
+                badges={badgesWithIcons}
+                footer={
+                  <Button
+                    text={card.view.buttonText}
+                    variant={card.view.buttonVariant}
+                    size="md"
+                    disabled={card.view.buttonDisabled}
+                    loading={loadingCardId === card.id}
+                    leftIcon={<SparkIcon />}
+                    rightIcon={loadingCardId === card.id ? undefined : <ArrowIcon />}
+                    onClick={() => {
+                      if (card.view.action) {
+                        runAction(card.id, card.view.action)
+                      }
+                    }}
+                  />
+                }
+              >
+                <p className="card-copy">{card.view.description}</p>
+              </Card>
+            )
+          })
+        ) : (
+          <article className="gallery__empty">
+            <p className="gallery__empty-eyebrow">Todo al dia</p>
+            <h2>No hay tareas en esta vista.</h2>
+            <p>Cambia el filtro para revisar otra parte del panel.</p>
+          </article>
+        )}
       </section>
     </main>
   )
