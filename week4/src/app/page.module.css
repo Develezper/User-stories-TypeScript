@@ -1,0 +1,131 @@
+.page {
+  min-height: 100vh;
+  padding: 28px;
+  background:
+    radial-gradient(circle at top left, rgba(197, 224, 203, 0.7), transparent 28%),
+    linear-gradient(180deg, #f4f1ea 0%, #ebe5da 100%);
+}
+
+.main {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  padding: 40px;
+  display: grid;
+  gap: 28px;
+  border: 1px solid rgba(25, 25, 25, 0.08);
+  background: rgba(255, 252, 247, 0.82);
+  backdrop-filter: blur(10px);
+}
+
+.eyebrow {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #5f6a61;
+}
+
+.intro {
+  display: grid;
+  gap: 16px;
+}
+
+.intro h1 {
+  max-width: 12ch;
+  font-size: clamp(2.8rem, 8vw, 5.5rem);
+  line-height: 0.92;
+  font-weight: 600;
+  letter-spacing: -0.08em;
+  color: #111111;
+}
+
+.intro p {
+  max-width: 54ch;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #4e554f;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.92rem;
+  font-weight: 600;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.primary {
+  background: #161616;
+  color: #faf7f0;
+}
+
+.secondary {
+  border-color: rgba(22, 22, 22, 0.14);
+  color: #161616;
+  background: transparent;
+}
+
+.primary:hover {
+  background: #2b2b2b;
+}
+
+.secondary:hover {
+  background: rgba(22, 22, 22, 0.04);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.card {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid rgba(22, 22, 22, 0.08);
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.cardLabel {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5f6a61;
+}
+
+.card p {
+  color: #464646;
+  line-height: 1.65;
+}
+
+@media (max-width: 800px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 14px;
+  }
+
+  .main {
+    padding: 24px;
+  }
+}

@@ -1,0 +1,304 @@
+.page {
+  min-height: 100vh;
+  padding: 40px 20px 56px;
+  background: #f7f7f3;
+  color: #161616;
+  font-family: "Helvetica Neue", "Arial Nova", sans-serif;
+}
+
+.shell {
+  width: min(1040px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 28px;
+}
+
+.header {
+  display: grid;
+  gap: 20px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(22, 22, 22, 0.12);
+}
+
+.headerIntro {
+  display: grid;
+  gap: 10px;
+}
+
+.eyebrow,
+.sectionLabel,
+.summaryLabel {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #77736b;
+}
+
+.title {
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  line-height: 0.95;
+  font-weight: 500;
+  letter-spacing: -0.06em;
+}
+
+.description {
+  max-width: 46ch;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #666159;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.summaryItem {
+  display: grid;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(22, 22, 22, 0.12);
+}
+
+.summaryValue {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+
+.primaryButton,
+.secondaryButton,
+.dangerButton {
+  appearance: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.ghostButton:hover,
+.primaryButton:hover,
+.secondaryButton:hover,
+.dangerButton:hover {
+  opacity: 0.92;
+}
+
+.toolbar {
+  display: grid;
+  gap: 12px;
+}
+
+.toolbarActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.section {
+  display: grid;
+  gap: 18px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(22, 22, 22, 0.12);
+}
+
+.sectionHeader {
+  display: grid;
+  gap: 8px;
+}
+
+.sectionTitle {
+  margin-top: 6px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+
+.form {
+  display: grid;
+  gap: 18px;
+}
+
+.fieldGroup {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #77736b;
+}
+
+.input {
+  width: 100%;
+  padding: 0 0 12px;
+  border: none;
+  border-bottom: 1px solid rgba(22, 22, 22, 0.18);
+  background: transparent;
+  color: #161616;
+  font-size: 1rem;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #161616;
+  box-shadow: none;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.primaryButton,
+.secondaryButton,
+.dangerButton {
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.primaryButton {
+  background: #161616;
+  color: #ffffff;
+  border-color: #161616;
+}
+
+.secondaryButton {
+  background: transparent;
+  color: #161616;
+  border-color: rgba(22, 22, 22, 0.14);
+}
+
+.dangerButton {
+  background: transparent;
+  color: #8f2d1e;
+  border-color: rgba(143, 45, 30, 0.24);
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.dangerButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.message,
+.error {
+  padding: 12px 0 0;
+  border-radius: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  border: none;
+}
+
+.message {
+  color: #17623d;
+}
+
+.error {
+  color: #8f2d1e;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(22, 22, 22, 0.12);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #77736b;
+}
+
+.list {
+  display: grid;
+  gap: 0;
+}
+
+.state {
+  padding: 20px 0;
+  color: #666159;
+  line-height: 1.6;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(22, 22, 22, 0.1);
+}
+
+.nameBlock {
+  display: grid;
+  gap: 4px;
+}
+
+.rowTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.rowId {
+  color: #77736b;
+  font-size: 0.84rem;
+}
+
+.rowValue {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.rowStatus {
+  color: #666159;
+  font-size: 0.88rem;
+}
+
+.rowActions {
+  display: flex;
+  gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .summary,
+  .fieldGroup,
+  .tableHeader,
+  .row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 14px;
+  }
+
+  .shell {
+    gap: 22px;
+  }
+
+  .rowActions,
+  .toolbarActions {
+    flex-wrap: wrap;
+  }
+}
